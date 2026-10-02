@@ -34,14 +34,22 @@ function App() {
 
   useEffect(() => {
     if (username) {
-      const provider = new SocketIOProvider(
-        "http://localhost:3000",
-        "monaco",
-        ydoc,
-        {
-          autoConnect: true,
-        },
-      );
+      const BACKEND_URL =
+        import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
+      const provider = new SocketIOProvider(BACKEND_URL, "monaco", ydoc, {
+        autoConnect: true,
+      });
+
+      // let binding;
+      // if (editorRef.current) {
+      //   binding = new MonacoBinding(
+      //     yText,
+      //     editorRef.current.getModel(),
+      //     new Set([editorRef.current]),
+      //     provider.awareness, // Yeh cursors dikhayega!
+      //   );
+      // }
 
       provider.awareness.setLocalStateField("user", { username });
 
@@ -68,7 +76,7 @@ function App() {
 
       window.addEventListener("beforeunload", handleBeforeUnload);
       return () => {
-        // monacoBinding.destroy();
+        // if (binding) binding.destroy();
         provider.disconnect();
         window.removeEventListener("beforeunload", handleBeforeUnload);
       };

@@ -2,6 +2,8 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { YSocketIO } from "y-socket.io/dist/server";
+// require("dotenv").config();
+import "dotenv/config";
 
 const app = express();
 const httpServer = createServer(app);
@@ -28,7 +30,7 @@ app.get("/health", (req, res) => {
     success: true,
   });
 });
-
-httpServer.listen(3000, () => {
-  console.log("Serevr is running on port 3000");
+const PORT = process.env.PORT || 3000;
+httpServer.listen(PORT, () => {
+  console.log(`Serevr is running on port: ${PORT}`);
 });
